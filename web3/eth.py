@@ -405,7 +405,18 @@ class AsyncEth(BaseEth):
         RPC.eth_getTransactionCount,
         mungers=[BaseEth.block_id_munger],
     )
+        
+    _get_logs: Method[Callable[[FilterParams], Awaitable[List[LogReceipt]]]] = Method(
+        RPC.eth_getLogs,
+        mungers=[default_root_munger]
+    )
 
+    async def get_logs(
+        self, 
+        filter_params: FilterParams,
+    ) -> List[LogReceipt]
+        return await self._get_logs(filter_params)
+    
     async def get_transaction_count(
         self,
         account: Union[Address, ChecksumAddress, ENS],
